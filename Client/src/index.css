@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+@layer utilities {
+  .nav-bar {
+    @apply flex justify-between items-center px-[60px] py-2 bg-white;
+  }
+  .nav-items {
+    @apply space-x-8;
+  }
+  .logo {
+    @apply -mx-3;
+  }
+  .hero {
+    @apply mb-40;
+  }
+  .main {
+    @apply h-svh w-full relative;
+  }
+  .info {
+    @apply bg-white py-[40px] px-[60px] md:py-[60px] md:px-[80px] rounded-r-[50px] absolute top-[20%] w-[40%] max-w-[600px] min-w-[450px] space-y-3 xl:space-y-5;
+  }
+  .heading {
+    @apply font-bold text-4xl xl:text-5xl;
+  }
+  .search-bar {
+    @apply absolute -top-[30px] w-[100%] h-[60px] pr-[2px] pl-[40px] z-10 flex justify-between items-center bg-white rounded-[50px] border-[#064749] border-[4px] [&>*]:h-[48px] [&>*]:flex;
+  }
+  .info-page {
+    @apply mx-16 bg-[#F2F0F2] rounded-[42px];
+  }
+}
