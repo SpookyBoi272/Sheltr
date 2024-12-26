@@ -1,46 +1,48 @@
 package main
 
 import (
-	"database/sql"
-	"fmt"
+	"errors"
 	"log"
 	"net/http"
+	"os"
 
 	_ "github.com/lib/pq"
 
 	"rent-server/config"
+	"rent-server/initializers"
 	"rent-server/internal/api"
-	"rent-server/internal/api/handlers"
-	"rent-server/internal/repositories"
-	"rent-server/internal/services"
 )
 
-func run() {
+func run() error {
+	var err error
 	cfg := config.Load()
 
-	connString := fmt.Sprintf("host=%v port=%v user=%v password=%v dbname=%v sslmode=disable", cfg.DBHost, cfg.DBPort, cfg.DBUser, cfg.DBPassword, cfg.DBName)
-	db , err := sql.Open("postgres", connString)
-
-	if err != nil {
-		log.Fatal("Error connecting to the database:", err)
+	if cfg.JwtKey == "" {
+		return errors.New("please set environment variables for jwt key")
 	}
 
-	userRepo := repositories.NewUserRepository(db)
-	userService := services.NewUserService(userRepo)
-	userHandler := handlers.NewUserHandler(userService)
+	db, err := initializers.GetNewDBConnection(cfg)
+	if err != nil {
+		return err
+	}
 
-
-	r := api.SetupRoutes(userHandler)
+	r := api.SetupRoutes(db, cfg)
 
 	log.Printf("Starting server on port %s", cfg.Port)
-	error := http.ListenAndServe(":"+cfg.Port, r)
-	if error != nil {
-		log.Fatal("Server error:" ,err)
+	err = http.ListenAndServe(":"+cfg.Port, r)
+	if err != nil {
+		return err
 	}
+
+	return nil
 }
 
 func main() {
 
-	run()
-	
+	err := run()
+	if err != nil {
+		log.Fatal("Server error:", err.Error())
+		os.Exit(1)
+	}
+
 }

@@ -13,6 +13,7 @@ type Config struct{
 	DBUser string
 	DBPassword string
 	DBName string
+	JwtKey string
 }
 
 func Load() *Config{
@@ -28,6 +29,7 @@ func Load() *Config{
 		DBUser: getEnv("DB_USER", "root"),
 		DBPassword: getEnv("DB_PASSWORD", ""),
 		DBName: getEnv("DB_NAME", "rent"),
+		JwtKey: getEnv("JWT_KEY", ""),
 	}
 }
 

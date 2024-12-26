@@ -10,43 +10,48 @@ type UserRepository struct {
 	DB *sql.DB
 }
 
-//constructor
-func NewUserRepository(db *sql.DB) *UserRepository{
-	return &UserRepository{DB : db}
+// constructor
+func NewUserRepository(db *sql.DB) *UserRepository {
+	return &UserRepository{DB: db}
 }
 
-func (r *UserRepository) GetUserByID(id int) (*models.User, error){
+func (repo *UserRepository) GetUserByEmail(email string) (*models.User, error) {
 	var user models.User
-	err := r.DB.QueryRow("SELECT id, name, email FROM users WHERE id = $1", id).Scan(&user.ID, &user.Name, &user.Email)
+	err := repo.DB.QueryRow("SELECT id, email, first_name, last_name, password_hash FROM users where email = $1", email).Scan(
+		&user.ID,
+		&user.Email,
+		&user.FirstName,
+		&user.LastName,
+		&user.PasswordHash)
 
 	if err == sql.ErrNoRows {
-		return nil, errors.New("user not found")
+		return nil, errors.New("user is not registered")
 	}
+	
 	if err != nil {
-		return nil, err
+		return nil, errors.New("error validating user")
 	}
 
-	return &user , nil
+	return &user, nil
 }
 
-func (r *UserRepository) GetAllUsers() ([]models.User , error){
-	rows, err := r.DB.Query("SELECT id, name, email FROM users")
+func (repo *UserRepository) CreateUser(data models.User) error {
+
+	_, err := repo.DB.Exec(`INSERT INTO users (email, first_name, last_name, password_hash)
+								 VALUES ($1, $2, $3, $4)`, data.Email, data.FirstName, data.LastName, data.PasswordHash)
 
 	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	var users []models.User
-	for rows.Next(){
-		var user models.User
-		err = rows.Scan(&user.ID, &user.Name, &user.Email)
-		if err != nil {
-			return nil, err
-		}
-
-		users = append(users, user)
+		return errors.New("error registering user")
 	}
 
-	return users, nil
+	return nil
+}
+
+func (repo *UserRepository) IsEmailRegistered (email string) (bool, error){
+	var exists bool
+	err := repo.DB.QueryRow("SELECT EXISTS(SELECT 1 FROM users WHERE email = $1)", email).Scan(&exists)
+	if err != nil {
+		return false, err
+	}
+	return exists, nil
 }
