@@ -15,6 +15,23 @@ func NewUserRepository(db *sql.DB) *UserRepository {
 	return &UserRepository{DB: db}
 }
 
+func (repo *UserRepository) GetUserByID(id int) (*models.User, error){
+	var user models.User
+
+	err := repo.DB.QueryRow("SELECT id, email, first_name, last_name FROM users where id = $1", id).Scan(
+		&user.ID,
+		&user.Email,
+		&user.FirstName,
+		&user.LastName,
+	)
+
+	if err != nil {
+		return nil, errors.New("error getting user")
+	}
+	
+	return &user, nil
+}
+
 func (repo *UserRepository) GetUserByEmail(email string) (*models.User, error) {
 	var user models.User
 	err := repo.DB.QueryRow("SELECT id, email, first_name, last_name, password_hash FROM users where email = $1", email).Scan(
@@ -22,7 +39,8 @@ func (repo *UserRepository) GetUserByEmail(email string) (*models.User, error) {
 		&user.Email,
 		&user.FirstName,
 		&user.LastName,
-		&user.PasswordHash)
+		&user.PasswordHash,
+	)
 
 	if err == sql.ErrNoRows {
 		return nil, errors.New("user is not registered")

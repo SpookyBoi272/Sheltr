@@ -63,7 +63,7 @@ func (h *AuthHandler) SignupHandler(w http.ResponseWriter, r *http.Request) {
 	
 	user, token, err := h.Service.SignupUser(&data)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
 

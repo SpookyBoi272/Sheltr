@@ -6,6 +6,7 @@ import (
 	"rent-server/config"
 	"rent-server/internal/models"
 	"rent-server/internal/repositories"
+	"strconv"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -40,6 +41,7 @@ func (s *AuthService) LoginUser(data *models.User) (*models.User, string, error)
 		return nil, "", errors.New("error validating user")
 	}
 
+	user.PasswordHash = ""
 	return user, jwtToken, nil
 }
 
@@ -124,7 +126,7 @@ func validateName(name string) error {
 
 func generateJWT(user *models.User, jwtKey string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user_id": user.ID,
+		"user_id": strconv.Itoa(user.ID),
 		"exp": time.Now().Add(time.Hour * 72).Unix(),
 	})
 
