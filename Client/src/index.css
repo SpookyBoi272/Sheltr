@@ -6,6 +6,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: sans-serif;
 }
 
 @layer utilities {
@@ -16,7 +17,10 @@
     @apply space-x-8;
   }
   .logo {
-    @apply -mx-3;
+    @apply -mx-2 w-[100px];
+  }
+  .padding {
+    @apply px-[60px];
   }
   .hero {
     @apply mb-40;
@@ -25,7 +29,7 @@
     @apply h-svh w-full relative;
   }
   .info {
-    @apply bg-white py-[40px] px-[60px] md:py-[60px] md:px-[80px] rounded-r-[50px] absolute top-[20%] w-[40%] max-w-[600px] min-w-[450px] space-y-3 xl:space-y-5;
+    @apply bg-white py-[40px] md:py-[60px] px-[60px] md:px-[80px] rounded-r-[50px] absolute top-[20%] w-[40%] max-w-[600px] min-w-[450px] space-y-3 xl:space-y-5;
   }
   .heading {
     @apply font-bold text-4xl xl:text-5xl;
@@ -34,6 +38,18 @@
     @apply absolute -top-[30px] w-[100%] h-[60px] pr-[2px] pl-[40px] z-10 flex justify-between items-center bg-white rounded-[50px] border-[#064749] border-[4px] [&>*]:h-[48px] [&>*]:flex;
   }
   .info-page {
-    @apply mx-16 bg-[#F2F0F2] rounded-[42px];
+    @apply padding;
+  }
+  .location {
+    @apply padding mt-32 gap-12 flex justify-center flex-col items-center;
+  }
+  .requirements {
+    @apply px-[10px] text-red-300;
+  }
+  .input {
+    @apply my-[10px] rounded-2xl h-[48px] text-[18px] px-[40px] border-none outline-[#97b1a1] text-[#49735A] placeholder-[#49735A] bg-[#F2F0F2];
+  }
+  footer {
+    @apply padding pt-[80px] pb-[50px] flex;
   }
 }

@@ -1,10 +1,8 @@
-import Navbar from "../components/Navbar";
-import SearchBar from "../components/SearchBar";
+import SearchBar from "./SearchBar";
 
 export default function Hero() {
   return (
     <div className="hero">
-      <Navbar />
       <div
         className="main"
         style={{
