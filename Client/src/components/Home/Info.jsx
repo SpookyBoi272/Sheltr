@@ -5,7 +5,7 @@ import {
   MdOutlineWifi,
   MdChair,
 } from "react-icons/md";
-import Feature from "../components/Feature";
+import Feature from "./Feature";
 
 export default function Info() {
   return (

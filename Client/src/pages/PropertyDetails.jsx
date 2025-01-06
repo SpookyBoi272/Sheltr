@@ -1,3 +1,7 @@
+import { useParams } from "react-router";
+
 export default function PropertyDetails() {
-  return <div>PropertyDetails</div>;
+  const { propertyId } = useParams();
+  console.log(propertyId);
+  return <div>{propertyId}</div>;
 }
