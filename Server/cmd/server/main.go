@@ -40,6 +40,7 @@ func run() error {
 func main() {
 
 	err := run()
+	
 	if err != nil {
 		log.Fatal("Server error:", err.Error())
 		os.Exit(1)

@@ -22,15 +22,15 @@ func NewAuthService(repo *repositories.UserRepository, cfg *config.Config) *Auth
 	return &AuthService{Repo: repo, Config: cfg}
 }
 
-func (s *AuthService) LoginUser(data *models.User) (*models.User, string, error){
+func (s *AuthService) LoginUser(user *models.User) (*models.User, string, error){
 
-	user, err := s.Repo.GetUserByEmail(data.Email)
+	user, err := s.Repo.GetUserByEmail(user.Email)
 
 	if err != nil {
 		return nil, "",errors.New("invalid email or password")
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash),[]byte(data.Password))
+	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash),[]byte(user.Password))
 	if err != nil {
 		return nil, "",errors.New("invalid email or password")
 	}
